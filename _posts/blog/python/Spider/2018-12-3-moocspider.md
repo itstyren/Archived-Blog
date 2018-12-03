@@ -216,16 +216,16 @@ def get_course_all_source(course_id):
                 for video_index, single_video in enumerate(video_set):
                     rename = re.sub(name_pattern_compile, '', single_video[3])
                     file.write('　　[视频] %s \n' % (rename))
-                    # get_content(
-                    #     single_video, '%d.%d.%d [视频] %s' %
-                    #     (index + 1, sub_index + 1, video_index + 1, rename),
-                    #     video_level)
+                    get_content(
+                        single_video, '%d.%d.%d [视频] %s' %
+                        (index + 1, sub_index + 1, video_index + 1, rename),
+                        video_level)
                     count_num += 1
                 # 遍历二级目录下pdf集合，写入目录并下载
                 for pdf_index, single_pdf in enumerate(pdf_set):
                     rename = re.sub(name_pattern_compile, '', single_pdf[3])
                     file.write('　　[文档] %s \n' % (rename))
-                    # get_content(single_pdf,'%d.%d.%d [文档] %s'%(index+1,sub_index+1,pdf_index+1+count_num,rename))
+                    get_content(single_pdf,'%d.%d.%d [文档] %s'%(index+1,sub_index+1,pdf_index+1+count_num,rename))
 ```
 ### 4.3 请求具体资源信息并下载处理
 &emsp;&emsp;由于慕课资源主要分为两种，一种为视频，一种为pdf。两种在获取下载地址时有所不同，所以我们要分别进行判断。
