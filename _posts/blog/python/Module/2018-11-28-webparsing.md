@@ -29,14 +29,14 @@ keywords: python 爬虫 XPATH Beautiful Soup
 
 [TOC]
 
-### 1 Xpath及lxml
+## 1 Xpath及lxml
 
-#### 1.1 什么是Xpath
+### 1.1 什么是Xpath
 
 &emsp;&emsp;XPath全称为XML Path Language，即XML路径语言。是一门在 XML 文档中查找信息的语言。XPath 可用来在 XML 文档中对元素和属性进行遍历。他是一个标准的函数库，也是W3C的一个标准。
 　　它最初是用在搜寻XML文档的，但是它**同样适用于HTML文档的检索**。　　
   
-#### 1.2 节点
+### 1.2 节点
 
 &emsp;&emsp; **简单说，xpath就是选择XML文件中节点的方法。** 所谓节点（node），就是XML文件的最小构成单位，一共分成7种。
 - element（元素节点）
@@ -47,7 +47,7 @@ keywords: python 爬虫 XPATH Beautiful Soup
 - comment （注释节点）
 - root （根节点）
 
-#### 1.3 路径表达式
+### 1.3 路径表达式
 
 &emsp;&emsp; Xpath通过"路径表达式"（Path Expression）来选择节点。在形式上，"路径表达式"与传统的文件系统非常类似。其基本格式如下：
 
@@ -68,7 +68,7 @@ keywords: python 爬虫 XPATH Beautiful Soup
  //input                            选取所有的input节点
 ```
 
-#### 1.4 选择节点的基本规则
+### 1.4 选择节点的基本规则
 
 
 | **规则** | **描述**  |
@@ -78,7 +78,7 @@ keywords: python 爬虫 XPATH Beautiful Soup
 | **.** | 选取当前节点。 | 
 | **..** | 选取当前节点的父节点。|
 
-#### 1.5 谓语条件
+### 1.5 谓语条件
 
 &emsp;&emsp; 所谓"谓语条件"，就是对**路径表达式的附加条件**。所有的条件，都写在**方括号"[]"** 中，表示对节点进行进一步的筛选。
 
@@ -94,13 +94,13 @@ keywords: python 爬虫 XPATH Beautiful Soup
 /bookstore/book[price>35.00] | 选取 bookstore 元素的所有 book 元素，且其中的 price 元素的值须大于35.00。| 
 | /bookstore/book[price>35.00]/title |选取 bookstore 元素中的 book 元素的所有 title 元素，且其中的 price 元素的值须大于 35.00。|
 
-#### 1.6 通配符
+### 1.6 通配符
 
 - " * "：表示匹配任何元素节点。
 - " @* "：表示匹配任何属性值。
 -  node()：表示匹配任何类型的节点。
 
-#### 1.7 节点轴选择器
+### 1.7 节点轴选择器
 
 &emsp;&emsp; 通过Xpath提供的轴选择器方法，可以获取子元素、兄弟元素、父元素、祖先元素等。
 　　其中，轴可定义相对于当前节点的节点集。可用轴如下：
@@ -129,12 +129,12 @@ keywords: python 爬虫 XPATH Beautiful Soup
 |**child::*** | 选取当前节点的所有子元素|
 
 
-#### 1.8 lxml插件的使用
-##### (1) 安装lxml
+### 1.8 lxml插件的使用
+#### (1) 安装lxml
 
 `pip install lxml`
 
-##### (2) 读取和初始化
+#### (2) 读取和初始化
 
 &emsp;&emsp; 首先我们使用 lxml 的 **etree 库**，然后利用**etree.HTML** 初始化，然后我们将其打印出来。在这里初始化库可以帮我们自动修正代码。
 
@@ -162,7 +162,7 @@ print(result)
 * 第一个是文件的相对路径
 * 第二个是etree,HTMLParser()
 
-##### (3)利用xpath匹配
+#### (3)利用xpath匹配
 &emsp;&emsp;初始化完成后可以使用xpath获取节点信息，示例如下：
 ```python
 from lxml import etree
@@ -182,19 +182,19 @@ print type(result[0])
 <type 'lxml.etree._Element'>
 ```
 
-### 2  Beautiful Soup
+## 2  Beautiful Soup
 &emsp;&emsp;Beautiful Soup 是一个可以从HTML或XML文件中提取数据的Python库。它能够通过你喜欢的转换器实现惯用的文档导航,查找,修改文档的方式。
-#### 2.1 与lxml区别
+### 2.1 与lxml区别
 &emsp;&emsp;相比与，lxml，BeautifulSoup是Python开发的，同时原理不同，**BeautifulSoup是基于DOM的**，会载入整个文档，解析整个DOM树，因此时间和内存开销都会大很多。而lxml只会局部遍历。
 　　使用xpath 要求一定清楚文档层次结构，它通过元素和属性进行导航，可以使用绝对路径或相对路径查找，而beautifulsoup 不必清楚文档结构，可以直接找某些标签。
   
-#### 2.2 Beautiful Soup初始化
+### 2.2 Beautiful Soup初始化
 
-##### （1）安装bs
+#### （1）安装bs
 　　`pip install beautifulsoup4`
 &emsp;&emsp;现在的项目中使用Beautiful Soup 4，不过它已经被移植到BS4了，也就是说导入时 **我们需要 import bs4** 。
 
-##### （2）解析器的选择
+#### （2）解析器的选择
 &emsp;&emsp;Beautiful Soup在解析时需要依赖解析器，它支持的解析器如下表所示
 
 | **解析器** | **使用方法** | **优势**  | **劣势** |
@@ -206,31 +206,31 @@ print type(result[0])
 
 &emsp;&emsp;推荐使用lxml解析器，他的效率更高。
 
-#### 2.3 Beautiful Soup对象种类
+### 2.3 Beautiful Soup对象种类
 
 &emsp;&emsp;Beautiful Soup将复杂HTML文档转换成一个复杂的树形结构,每个节点都是Python对象,所有对象可以归纳为4种: **Tag** , **NavigableString** , **BeautifulSoup** , **Comment** 。
-##### （1）BeautifulSoup
+#### （1）BeautifulSoup
 &emsp;&emsp;BeautifulSoup 对象表示的是一个文档的全部内容.大部分时候,可以把它当作 Tag 对象。
 
-##### （2）Tag
+#### （2）Tag
 &emsp;&emsp;其代表的就是HTML或XML原生文档中的节点。
 
-##### （3）NavigableString
+#### （3）NavigableString
 &emsp;&emsp;代表来包装tag中的字符串。
 
-##### （4）Comment
+#### （4）Comment
 &emsp;&emsp;Comment 对象是一个特殊类型的 NavigableString 对象，其代表了文档中的注释及特殊字符串。
 
-#### 2.4 遍历文档树
-##### 2.4.1 基础用法
-###### （1）节点名字选择
+### 2.4 遍历文档树
+#### 2.4.1 基础用法
+#### （1）节点名字选择
 
 &emsp;&emsp;操作文档树最简单的方法就是告诉它你想获取的tag的name。
 ```python
 soup.body.b  
 # <b>The Dormouse's story</b>
 ```
-###### （2）获取内容
+#### （2）获取内容
 
 &emsp;&emsp;提取信息方式有一下三种属性：
 
@@ -257,8 +257,8 @@ for string in soup.stripped_strings:
     # u"The Dormouse's story"
 ```
 
-##### 2.4.2 子节点与子孙节点
-###### （1）.contents 和 .childrens
+#### 2.4.2 子节点与子孙节点
+#### （1）.contents 和 .childrens
 &emsp;&emsp;这两个属性得到的都是当前节点的直接子节点，不同在于**前者**是直接以列表形式输出,可以利用索引获取元素；**后者**返回的是一个 list 生成器对象。如下实例所示
 
 ```python
@@ -272,7 +272,7 @@ for child in  soup.body.children:
 #<p class="title" name="dromouse"><b>The Dormouse's story</b></p>
 #<a class="sister" href="http://example.com/elsie" id="link1"><!-- Elsie --></a>,
 ```
-###### （2）.descendants
+#### （2）.descendants
 &emsp;&emsp;返回的同样是**生成器**，但是是返回了所有子孙节点的生成器。
 ```python
 for child in head_tag.descendants:
@@ -280,18 +280,18 @@ for child in head_tag.descendants:
     # <title>The Dormouse's story</title>
     # The Dormouse's story
 ```
-##### 2.4.3 父节点和祖先节点
-###### （1）.parent
+#### 2.4.3 父节点和祖先节点
+#### （1）.parent
 &emsp;&emsp;获取某个元素的父节点。
 
-###### （2） .parents
+#### （2） .parents
 &emsp;&emsp;获取所有的祖先节点，返回的同样是列表生成器。
 
-##### 2.4.4 兄弟节点
-###### （1）.next_sibling 和 .previous_sibling
+#### 2.4.4 兄弟节点
+#### （1）.next_sibling 和 .previous_sibling
 &emsp;&emsp;分别用来获取节点的下一个或者上一个兄弟元素。
 
-###### （2）.next_siblings 和 .previous_siblings
+#### （2）.next_siblings 和 .previous_siblings
 &emsp;&emsp;分别返回后面和前面的兄弟节点，这里是所有兄弟节点，以生成器形式返回。
 
 ```python
@@ -303,8 +303,8 @@ for sibling in soup.a.next_siblings:
     # u' and\n'
 ```
 
-#### 2.5 搜索文档树
-##### 2.5.1 find_all()
+### 2.5 搜索文档树
+#### 2.5.1 find_all()
 &emsp;&emsp;find_all() 方法搜索当前tag的所有tag子节点,并判断是否符合过滤器的条件。
 　　参数格式如下：
   `find_all( name , attrs , recursive , text , **kwargs )`
@@ -390,44 +390,44 @@ soup.find_all("a", string="Elsie")# [<a href="http://example.com/elsie" class="s
 **（5）recursive 参数**
 &emsp;&emsp;若只想搜索tag的直接子节点,可以使用参数 recursive=False .
 
-##### 2.5.2 简写find_all()
+#### 2.5.2 简写find_all()
 &emsp;&emsp;find_all() 几乎是Beautiful Soup中最常用的搜索方法,所以我们定义了它的简写方法.。BeautifulSoup 对象和 tag 对象可以被当作一个方法来使用，下面两行代码是等价的:
 ```python
 soup.title.find_all(string=True)
 soup.title(string=True)
 ```
 
-##### 2.5.3 find（）
+#### 2.5.3 find（）
 &emsp;&emsp;它与 find_all() 方法唯一的区别是 find_all() 方法的返回结果是值包含一个元素的列表,而 find() 方法直接返回结果
 
-##### 2.5.4 CSS选择器
+#### 2.5.4 CSS选择器
 &emsp;&emsp;除恶利用find_all()，在这里我们也可以利用soup.select()通过选择器筛选元素，返回类型是 list。
-###### （1）通过标签名
+#### （1）通过标签名
 ```python
 print soup.select('title') 
 #[<title>The Dormouse's story</title>]
 ```
-###### （2）通过类名
+#### （2）通过类名
 ```python
 print soup.select('.sister')
 #[<a class="sister" href="http://example.com/elsie" id="link1"><!-- Elsie --></a>, <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>, ]
 ```
-###### （3）通过id名
+#### （3）通过id名
 ```python
 print soup.select('#link1')
 #[<a class="sister" href="http://example.com/elsie" id="link1"><!-- Elsie --></a>]
 ```
-###### （4）组合查找
+#### （4）组合查找
 &emsp;&emsp;组合原理和我们写css时候一样，如下
 ```python
 print soup.select('p #link1')
 #[<a class="sister" href="http://example.com/elsie" id="link1"><!-- Elsie --></a>]
 ```
-###### （5）属性查找
+#### （5）属性查找
 &emsp;&emsp;属性需要用中括号括起来，注意属性和标签属于同一节点，所以中间不能加空格，否则会无法匹配到。
 ```python
 print soup.select('a[href="http://example.com/elsie"]')
 #[<a class="sister" href="http://example.com/elsie" id="link1"><!-- Elsie --></a>]
 ```
-### 3 pyquery
+## 3 pyquery
 这个我觉得用不上，不整理了。
