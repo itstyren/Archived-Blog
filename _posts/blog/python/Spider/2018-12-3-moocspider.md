@@ -15,6 +15,7 @@ keywords: Spider,Python,爬虫
 &emsp;&emsp;本爬虫在实现时主要就用了request和re两个库，相对比较简单。由于MOOC上的页面都不是静态页面，所以我们不能直接抓取页面的内容，需要从http请求入手。
 
 > &emsp;&emsp;简单的判断是否为静态页面的方法：针对一个页面，按下CTRL+U，在弹出的源码页面查找原页面中的数据字段，如果没有那么一定是动态页面。
+> &emsp;&emsp;对于动态加载的部分，也就是Ajax请求，在network中为特殊的请求类型，叫做xhr。同时在该请求的Request Headers中有一个信息为X-Reauest-With：XMLHttpRequest，即代表了这是一个Ajax请求。
 
 &emsp;&emsp;在分析网站时，我们主要使用fiddler进行数据抓包。
 
@@ -26,26 +27,26 @@ keywords: Spider,Python,爬虫
 
 &emsp;&emsp;我们进入任意课程，可以发现一般我们在课件页面可以在选择任意子资源进入开始学习，故可以推测在进入这个页面之前一定有发送相关的课程信息（比如课程id什么的）来进行获取资源列表。
 
-![](/images/blog/python/Spider/mooc-1.png)
+![](/images/blog/python/spider/mooc/mooc-1.png)
 
 &emsp;&emsp;利用fiddler分析在进入这个页面的时候都有哪些请求（为了尽量少不必要的请求，我们可以先点到比如评分标准，然后清空fiddler里面所有请求，再点回课件，这样可以少处理比如头部一些不是这里我们需要的请求。）可以看到一共只有6个请求，这里只有一个post请求，而且数据量相比于其他的大了很多，所以我们着重分析这个请求。
 
-![](/images/blog/python/Spider/mooc-2.png)
+![](/images/blog/python/spider/mooc/mooc-2.png)
 
 &emsp;&emsp;复制该请求返回的数据到Nodepad++分析，可以发现里面的数据非常有规律，但是由于编码原因，里面的中文数据都是乱码，非常不利于我们分析，所以我们可以先复制这些字符，然后通过 `encode('utf-8').decode('unicode_escape')` 方法进行**两次转译**，然后就会将乱码中文字符转换成中文。
 &emsp;&emsp;**转译前：**
 
-![](/images/blog/python/Spider/mooc-3.png)
+![](/images/blog/python/spider/mooc/mooc-3.png)
 
 &emsp;&emsp;**转译后**：
 
-![](/images/blog/python/Spider/mooc-4.png)
+![](/images/blog/python/spider/mooc/mooc-4.png)
 
 &emsp;&emsp;通过分析这个文本我们可以对整个目录的结构都有一个大体的了解。比如每个章节标题的id是和下面子章节的charpterId对应的。具体需要什么信息我们可以一会再分析。
 
 &emsp;&emsp;现在我们再来看看这个请求的发送时候需要发送什么信息，同样是在fiddler中查看row中信息（红框中的即为post请求发送的信息）：
 
-![](/images/blog/python/Spider/mooc-5.png)
+![](/images/blog/python/spider/mooc/mooc-5.png)
 
 &emsp;&emsp;单独一个课程的请求可能让我们无法清晰的认识到哪些字段是不变的，那些是变化的，所以建议多试几个不同课程的请求，然后我们就可以很明显的发现这些字段是有规律的，其中大部分字段是不变的，一些可能变化的字段的说明
 
@@ -59,31 +60,31 @@ keywords: Spider,Python,爬虫
 ### 3.2 寻找课程唯一id
 &emsp;&emsp;我们如果有注意到话会看到其实这个id和我们在现在地址栏出现的tid是一致的。
 
-![](/images/blog/python/Spider/mooc-6.png)
+![](/images/blog/python/spider/mooc/mooc-6.png)
 
 &emsp;&emsp;所以我们可以推测这个id应该是在进入课程介绍界面时候获取的。因为在课程介绍页面是没有这个id的，我们再次通过fiddler
 抓取进入课程介绍界面时候的请求，根据经验一般这种id都会在第一个请求时候获得，通过查看第一个第一个get请求，在返回数据中，我们的确可以检索到相应的id字段。
 
-![](/images/blog/python/Spider/mooc-7.png)
+![](/images/blog/python/spider/mooc/mooc-7.png)
 
 &emsp;&emsp;现在有了唯一id，也就可以获得这个课程的所有资源列表了，回过头再去看一次我们3.1中获得的资源列表文件，可以看到里面只有数据字段并没有下载链接，所以我们还需要进一步到具体的视频或文件界面去分析。
 
 ### 3.3 寻找资源下载方式
 &emsp;&emsp;同样的，我们用fiddler截取时，可以先进入到具体播放页面，然后清空fiddler记录，再次跳转，这样保证了除了中心部分内容，其他部分文件不会再次请求。通过分析我们可以看到这次同样只有一个post请求，而且体积最大，随意着重对其分析。
 
-![](/images/blog/python/Spider/mooc-8.png)
+![](/images/blog/python/spider/mooc/mooc-8.png)
 
 &emsp;&emsp;如果是文件资源，那么可以直接在fiddler中查看返回的json格式数据，在里面我们可以非常容易的发现有一个下载地址，这样我们就已经确定了如何下载pdf。
 
-![](/images/blog/python/Spider/mooc-9.png)
+![](/images/blog/python/spider/mooc/mooc-9.png)
 
 &emsp;&emsp;如果是视频资源，那么fiddler中不能直接转换成json格式，我们继续到notepad++中打开，可以看到里面有非常多的下载链接，根据字段可以推测应该是用于不同的播放器以及不同的清晰度，这也为我们之后选择选择视频的格式有了可能性。
 
-![](/images/blog/python/Spider/mooc-10.png)
+![](/images/blog/python/spider/mooc/mooc-10.png)
 
 &emsp;&emsp;下面来看一下post请求的请求体中都有哪些内容，如果对比不同的视频及文档请求，可以发现其中同样有很多是固定不变的，会变化的请求列出如下：
 
-![](/images/blog/python/Spider/mooc-11.png)
+![](/images/blog/python/spider/mooc/mooc-11.png)
 
 | **所需字段** | **字段说明**  |
 | --- | --- |
@@ -112,7 +113,7 @@ keywords: Spider,Python,爬虫
 ## 4 代码实现
 &emsp;&emsp;有了之前的逻辑分析，代码实现就比较简单了。在实现代码之前，再梳理一遍获取慕课资源的流程图。
 
-![](/images/blog/python/Spider/mooc-12.png)
+![](/images/blog/python/spider/mooc/mooc-12.png)
 
 &emsp;&emsp;整体代码实现的逻辑也是上面这几点，下面只对部上述几个步骤关键代码进行说明，具体实现可以[下载源码](https://github.com/CyrusRenty/MOOC-Download)自行查看。
 
