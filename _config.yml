@@ -2,12 +2,12 @@
 #   Main Configs   #
 # ---------------- #
 baseurl:
-url: https://cyrusrenty.github.io/
+url: https://itstyren.github.io/
 date_format: "ordinal"
 title: Cyrus Ren
 subtitle: "任天宇的博客"
 description: "任天宇的个人博客"
-keywords: Cyrus Ren, Ren TianYu
+keywords: Tianyu Ren, Ren TianYu
 timezone: Asia/Shanghai
 encoding: "utf-8"
 side_bar_repo_limit: 5
@@ -16,11 +16,11 @@ side_bar_repo_limit: 5
 #      Author      #
 # ---------------- #
 author: Ren TianYu
-organization: 武汉理工大学
+organization: University of Manchester
 organization_url: ''
-github_username: CyrusRenty
-location: Wuhan, China
-email: cyrus.renty.gmail.com
+github_username: itstyren
+location: Manchester, UK
+email: ty.ren@outlook.com
 
 # ---------------- #
 #    Navigation    #
